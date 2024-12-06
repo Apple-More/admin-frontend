@@ -12,6 +12,7 @@ import { setCookie, destroyCookie, parseCookies } from "nookies"; // For cookie-
 import { loginService } from "@/services/LoginServices";
 import jwt from "jsonwebtoken";
 import { User } from "@/types/UserType";
+import { toast } from "react-toastify";
 
 // Define the structure of the AuthContext
 export interface AuthContextType {
@@ -52,6 +53,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const response = await loginService(email, password);
 
       const accessToken = response.data.data.accessToken;
+      localStorage.setItem("jwt_token", accessToken);
       const decoded = jwt.decode(accessToken) as { user: User } | null; // Cast decoded payload
 
       if (!decoded || !decoded.user) {
@@ -71,13 +73,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       router.push("/");
     } catch (error) {
       console.error(error instanceof Error ? error.message : "Login failed.");
-      alert("Login failed.");
+      toast.error("Login failed.");
     }
   };
 
   // Logout function
   const logout = () => {
     setUser(null);
+    localStorage.removeItem("jwt_token");
     localStorage.removeItem("user");
     destroyCookie(null, "authToken", { path: "/" });
     router.refresh(); // Force a re-render of the app
