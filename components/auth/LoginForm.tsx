@@ -1,8 +1,6 @@
 "use client";
-import Login from "@/app/(auth)/auth/login/page";
 import IconLockDots from "@/components/icon/icon-lock-dots";
 import IconMail from "@/components/icon/icon-mail";
-import { loginService } from "@/services/LoginServices";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
@@ -13,6 +11,7 @@ const LoginForm = () => {
   const { login, isAuthenticated } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const handleLogin = async (e: any) => {
     e.preventDefault();
     try {
@@ -20,7 +19,6 @@ const LoginForm = () => {
     } catch (error) {
       toast.error("Invalid email or password");
     }
-    router.push("/");
   };
 
   return (

@@ -1,3 +1,4 @@
+"use client";
 import ContentAnimation from "@/components/layouts/content-animation";
 import Footer from "@/components/layouts/footer";
 import Header from "@/components/layouts/header";
@@ -6,12 +7,9 @@ import Overlay from "@/components/layouts/overlay";
 import ScrollToTop from "@/components/layouts/scroll-to-top";
 import Setting from "@/components/layouts/setting";
 import Sidebar from "@/components/layouts/sidebar";
+import { protectRoute } from "../protectRoute";
 
-export default function DefaultLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function DefaultLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       {/* BEGIN MAIN CONTAINER */}
@@ -45,3 +43,6 @@ export default function DefaultLayout({
     </>
   );
 }
+
+// Wrap with `protectRoute` to protect all pages using this layout
+export default protectRoute(DefaultLayout);

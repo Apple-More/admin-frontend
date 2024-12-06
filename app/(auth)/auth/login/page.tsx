@@ -22,26 +22,15 @@ const Login = () => {
           <div className="relative flex flex-col justify-center rounded-md bg-white/60 px-6 py-20 backdrop-blur-lg dark:bg-black/50 lg:min-h-[758px]">
             <div className="absolute end-6 top-6"></div>
             <div className="mx-auto w-full max-w-[440px]">
-              {isAuthenticated ? (
-                <div className="mb-10">
-                  <p className="font-bold text-red-700">
-                    You are already logged in
-                  </p>
-                </div>
-              ) : (
-                <>
-                  <div className="mb-10">
-                    <h1 className="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">
-                      Sign in
-                    </h1>
-                    <p className="text-base font-bold leading-normal text-white-dark">
-                      Enter your email and password to login
-                    </p>
-                  </div>
-                  <LoginForm />
-                </>
-              )}
-
+              <div className="mb-10">
+                <h1 className="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">
+                  Sign in
+                </h1>
+                <p className="text-base font-bold leading-normal text-white-dark">
+                  Enter your email and password to login
+                </p>
+              </div>
+              <LoginForm />
               <div className="mt-5">
                 <Link
                   href={"/auth/forgot-password"}

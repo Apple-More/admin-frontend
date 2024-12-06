@@ -12,6 +12,7 @@ import { setCookie, destroyCookie, parseCookies } from "nookies"; // For cookie-
 import { loginService } from "@/services/LoginServices";
 import jwt from "jsonwebtoken";
 import { User } from "@/types/UserType";
+import Loading from "@/components/layouts/loading";
 
 // Define the structure of the AuthContext
 export interface AuthContextType {
@@ -52,7 +53,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const response = await loginService(email, password);
 
       const accessToken = response.data.data.accessToken;
-      const decoded = jwt.decode(accessToken) as { user: User } | null; // Cast decoded payload
+      const decoded = jwt.decode(accessToken) as { user: User } | null; // Decode the payload
 
       if (!decoded || !decoded.user) {
         throw new Error("Invalid token: User not found in payload");
@@ -70,38 +71,44 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setUser(user);
       router.push("/");
     } catch (error) {
-      console.error(error instanceof Error ? error.message : "Login failed.");
-      alert("Login failed.");
+      console.error("Login failed:", error);
+      throw new Error("Invalid email or password");
     }
   };
 
   // Logout function
   const logout = () => {
     setUser(null);
-    localStorage.removeItem("user");
     destroyCookie(null, "authToken", { path: "/" });
-    router.refresh(); // Force a re-render of the app
     router.push("/login");
   };
 
-  //Retrieve stored user from localStorage on mount
-  // useEffect(() => {
-  //   const storedUser = localStorage.getItem("user");
-  //   if (storedUser) setUser(JSON.parse(storedUser));
-  //   setLoading(false); // Set loading to false after user is retrieved
-  // }, []);
+  // Parse `authToken` from cookies on initial load and set the user state
+  useEffect(() => {
+    const cookies = parseCookies();
+    const token = cookies.authToken;
 
-  // // Store user in localStorage when it changes
-  // useEffect(() => {
-  //   if (user) localStorage.setItem("user", JSON.stringify(user));
-  //   else localStorage.removeItem("user");
-  // }, [user]);
+    if (token) {
+      try {
+        const decoded = jwt.decode(token) as { user: User } | null;
+
+        if (decoded && decoded.user) {
+          setUser(decoded.user); // Set the user state if token is valid
+        }
+      } catch (error) {
+        console.error("Failed to decode token:", error);
+        logout(); // Invalidate token and clear user if decoding fails
+      }
+    }
+
+    setLoading(false); // Mark loading as complete after processing
+  }, []);
 
   return (
     <AuthContext.Provider
       value={{ user, login, logout, isAuthenticated, loading }}
     >
-      {children}
+      {!loading ? children : <Loading/>} {/* Show a loading indicator */}
     </AuthContext.Provider>
   );
 };
