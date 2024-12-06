@@ -58,6 +58,7 @@
         "swiper": "^8.4.7",
         "typescript": "^5.3.3",
         "universal-cookie": "^6.1.1",
+        "vristo-next": "file:",
         "yet-another-react-lightbox": "^3.15.6",
         "yup": "^0.32.11"
     },
