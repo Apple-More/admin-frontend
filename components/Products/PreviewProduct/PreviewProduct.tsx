@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Product } from "@/types/ProductType";
+import { getSingleProduct } from "@/services/ProductService";
 
 interface PreviewProductProps {
   productId: string;
@@ -9,24 +10,22 @@ interface PreviewProductProps {
 
 const PreviewProduct: React.FC<PreviewProductProps> = ({ productId }) => {
   const router = useRouter();
-  // Get product ID from URL
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Fetch product data from the backend
   useEffect(() => {
-    if (productId) {
-      fetch(`/api/products/${productId}`)
-        .then((res) => res.json())
-        .then((data) => {
-          setProduct(data);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching product:", error);
-          setLoading(false);
-        });
-    }
+    const fetchProduct = async (productId: string) => {
+      try {
+        const response = await getSingleProduct(productId);
+        setProduct(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchProduct(productId);
   }, [productId]);
 
   if (loading) {

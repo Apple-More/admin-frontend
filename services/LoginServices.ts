@@ -12,7 +12,7 @@ import axios from "axios";
 export const loginService = async (email: string, password: string) => {
   try {
     const response = await axiosInstance.post(
-      "/users/v1/auth/customers/login",
+      "/user-service/v1/public/auth/admin/login",
       {
         email,
         password,

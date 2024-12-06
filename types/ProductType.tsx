@@ -1,6 +1,7 @@
 import { ProductVariant } from "./ProductVariantType";
 
 export interface Product {
+  productId: string;
   productName: string;
 
   description: string;

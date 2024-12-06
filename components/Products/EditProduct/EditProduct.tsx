@@ -12,6 +12,8 @@ import EditImages from "./EditImages";
 import EditDescription from "./EditDescription";
 import EditProductName from "./EditProductName";
 import AddCategory from "../AddProduct/AddCategory";
+import { updateProduct } from "@/services/ProductService";
+import { toast } from "react-toastify";
 
 interface EditProductProps {
   productId: string;
@@ -121,6 +123,7 @@ const EditProduct: React.FC<EditProductProps> = ({ productId }) => {
 
   const handleAddVariant = () => {
     const newVariant: ProductVariant = {
+      variantId: "",
       price: formData.price,
       stock: formData.stock,
       attributes: { ...formData.attributes },
@@ -137,9 +140,10 @@ const EditProduct: React.FC<EditProductProps> = ({ productId }) => {
     }));
   };
 
-  const handleSave = async () => {
+  const handleUpdateProduct = async () => {
     try {
       const product: Product = {
+        productId: "",
         productName: formData.productName,
         description: formData.description,
         category: formData.category,
@@ -148,20 +152,17 @@ const EditProduct: React.FC<EditProductProps> = ({ productId }) => {
         variants: productVariants,
       };
 
-      const response = await fetch(`/api/products/${productId}`, {
-        method: "PUT", // Use PUT for updating an existing product
-        body: JSON.stringify(product),
-      });
+      const response = await updateProduct(productId, product);
 
-      if (response.ok) {
-        alert("Product updated successfully!");
+      if (response.status === 1) {
+        toast.success("Product updated successfully!");
         router.push("/apps/products"); // Redirect to the product list page or desired page
       } else {
-        alert("Failed to update product.");
+        toast.error("Failed to update product.");
       }
     } catch (error) {
       console.error("Error updating product:", error);
-      alert("An error occurred while updating the product.");
+      toast.error("An error occurred while updating the product.");
     }
   };
 
@@ -285,7 +286,7 @@ const EditProduct: React.FC<EditProductProps> = ({ productId }) => {
         </div>
         <div className="panel m-2">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-1">
-            <SavePanel {...{ handleSave }} />
+            <SavePanel handleSave={handleUpdateProduct} />
           </div>
         </div>
       </div>

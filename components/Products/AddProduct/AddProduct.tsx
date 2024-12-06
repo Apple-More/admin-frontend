@@ -12,6 +12,7 @@ import SavePanel from "../SavePanel";
 import { ProductVariant } from "@/types/ProductVariantType";
 import AddCategory from "./AddCategory";
 import { toast } from "react-toastify";
+import { addProduct } from "@/services/ProductService";
 
 const AddProduct = () => {
   const [attributeList, setAttributeList] = useState<string[]>([
@@ -75,6 +76,7 @@ const AddProduct = () => {
   // Function to add a product variant
   const handleAddVariant = () => {
     const newVariant: ProductVariant = {
+      variantId: "",
       price: formData.price,
       stock: formData.stock,
       attributes: { ...formData.attributes },
@@ -101,9 +103,10 @@ const AddProduct = () => {
     }));
   };
 
-  const handleSave = async () => {
+  const handleAddProduct = async () => {
     try {
       const product: Product = {
+        productId: "",
         productName: formData.productName,
         description: formData.description,
         category: category,
@@ -112,12 +115,9 @@ const AddProduct = () => {
         variants: productVariants,
       };
 
-      const response = await fetch("/api/products", {
-        method: "POST",
-        body: JSON.stringify(product),
-      });
+      const response = await addProduct(product);
 
-      if (response.ok) {
+      if (response.status === 1) {
         toast.success("Product saved successfully!");
         setFormData({
           productName: "",
@@ -261,7 +261,7 @@ const AddProduct = () => {
           </div>
           <div className="panel m-2">
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-1">
-              <SavePanel {...{ handleSave }} />
+              <SavePanel handleSave={handleAddProduct} />
             </div>
           </div>
         </div>

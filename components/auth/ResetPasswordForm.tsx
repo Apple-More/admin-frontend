@@ -1,7 +1,9 @@
 "use client";
 import IconMail from "@/components/icon/icon-mail";
+import { resetPassword } from "@/services/PasswordChangeServices";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 const ResetPasswordForm = () => {
   const router = useRouter();
@@ -14,21 +16,33 @@ const ResetPasswordForm = () => {
   const passwordRegex =
     /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-  const submitForm = (e: any) => {
+  const handleResetPassword = async (e: any) => {
     e.preventDefault();
-    const isPasswordValid = passwordRegex.test(newPassword);
-    setErrors((prevErrors) => ({
-      ...prevErrors,
-      passwordMismatch: newPassword !== confirmPassword,
-      invalidPassword: !isPasswordValid,
-    }));
+    try {
+      const userEmail = localStorage.getItem("userEmail");
+      const isPasswordValid = passwordRegex.test(newPassword);
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        passwordMismatch: newPassword !== confirmPassword,
+        invalidPassword: !isPasswordValid,
+      }));
 
-    if (isPasswordValid && newPassword === confirmPassword) {
-      router.push("/");
+      if (isPasswordValid && newPassword === confirmPassword) {
+        const response = await resetPassword(newPassword, userEmail);
+        if (response.status === 1) {
+          localStorage.removeItem("userEmail");
+          toast.success("Password Reset Successfully");
+          router.push("login");
+        } else {
+          toast.error("Password Reset Failed");
+        }
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
   return (
-    <form className="space-y-5" onSubmit={submitForm}>
+    <form className="space-y-5" onSubmit={handleResetPassword}>
       <div>
         <label htmlFor="Email" className="dark:text-white">
           New Password
@@ -39,6 +53,7 @@ const ResetPasswordForm = () => {
             type="text"
             placeholder="Enter New Password"
             className="form-input  placeholder:text-white-dark"
+            required
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
           />
@@ -52,6 +67,7 @@ const ResetPasswordForm = () => {
             type="text"
             placeholder="Confirm New Password"
             className="form-input  placeholder:text-white-dark"
+            required
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />

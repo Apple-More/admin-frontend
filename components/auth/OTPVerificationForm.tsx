@@ -1,18 +1,31 @@
 "use client";
 import IconMail from "@/components/icon/icon-mail";
+import { otpVerification } from "@/services/PasswordChangeServices";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 const OTPVerificationForm = () => {
   const router = useRouter();
   const [OTP, setOTP] = useState("");
 
-  const submitForm = (e: any) => {
+  const handleOTPVerification = async (e: any) => {
     e.preventDefault();
-    router.push("reset-password");
+    try {
+      const userEmail = localStorage.getItem("userEmail");
+      const response = await otpVerification(Number(OTP), userEmail);
+      if (response.status === 1) {
+        toast.success("OTP Verified Successfully");
+        router.push("reset-password");
+      } else {
+        toast.error("Invalid OTP");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
-    <form className="space-y-5" onSubmit={submitForm}>
+    <form className="space-y-5" onSubmit={handleOTPVerification}>
       <div>
         <div className="relative text-white-dark">
           <input
@@ -20,6 +33,7 @@ const OTPVerificationForm = () => {
             type="text"
             placeholder="Enter OTP Number Here"
             className="form-input  placeholder:text-white-dark"
+            required
             value={OTP}
             onChange={(e) => {
               if (/^\d*$/.test(e.target.value)) {
