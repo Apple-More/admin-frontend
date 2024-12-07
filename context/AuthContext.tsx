@@ -87,18 +87,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     router.push("/login");
   };
 
-  //Retrieve stored user from localStorage on mount
-  // useEffect(() => {
-  //   const storedUser = localStorage.getItem("user");
-  //   if (storedUser) setUser(JSON.parse(storedUser));
-  //   setLoading(false); // Set loading to false after user is retrieved
-  // }, []);
+  useEffect(() => {
+    const storedToken = localStorage.getItem("jwt_token");
+    if (storedToken) {
+      const decoded = jwt.decode(storedToken) as { user: User } | null;
+      if (decoded && decoded.user) {
+        setUser(decoded.user);
+      }
+    }
+    setLoading(false); // Set loading to false after user is retrieved
+  }, []);
 
-  // // Store user in localStorage when it changes
-  // useEffect(() => {
-  //   if (user) localStorage.setItem("user", JSON.stringify(user));
-  //   else localStorage.removeItem("user");
-  // }, [user]);
+  // Store user in localStorage when it changes
+  useEffect(() => {
+    if (user) localStorage.setItem("user", JSON.stringify(user));
+    else localStorage.removeItem("user");
+  }, [user]);
 
   return (
     <AuthContext.Provider
