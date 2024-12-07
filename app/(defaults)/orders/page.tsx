@@ -1,6 +1,7 @@
 import ComponentsTablesHover from "@/components/tables/components-tables-hover";
 import Link from "next/link";
 import React from "react";
+import OrderTable from "@/components/orders/OrdersTable";
 
 const page = () => {
   return (
@@ -16,7 +17,7 @@ const page = () => {
         </li>
       </ul>
       <div className="pt-5">
-        <ComponentsTablesHover />
+        <OrderTable />
       </div>
     </div>
   );
