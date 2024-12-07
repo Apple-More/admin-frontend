@@ -18,7 +18,7 @@ function DefaultLayout({ children }: { children: React.ReactNode }) {
         <ScrollToTop />
 
         {/* BEGIN APP SETTING LAUNCHER */}
-        <Setting />
+        {/* <Setting /> */}
         {/* END APP SETTING LAUNCHER */}
 
         <MainContainer>

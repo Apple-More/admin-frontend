@@ -76,19 +76,6 @@ const CustomerTable = () => {
                 ),
               },
               {
-                accessor: "customerId",
-                title: "Customer ID",
-                textAlignment: "center",
-                sortable: false,
-                render: ({ customerId }) => (
-                  <Link href="/apps/Customers/preview">
-                    <div className="font-semibold text-primary underline hover:no-underline">
-                      {customerId}
-                    </div>
-                  </Link>
-                ),
-              },
-              {
                 accessor: "customerName",
                 title: "Customer Name",
                 textAlignment: "center",

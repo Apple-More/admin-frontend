@@ -117,7 +117,7 @@ const Sidebar = () => {
             <Link href="/" className="main-logo flex shrink-0 items-center">
               <img
                 className="ml-[5px] w-8 flex-none"
-                src="/assets/images/logo.svg"
+                src="/assets/images/appleMore.png"
                 alt="logo"
               />
               <span className="align-middle text-2xl font-semibold dark:text-white-light lg:inline ltr:ml-1.5 rtl:mr-1.5">
@@ -256,12 +256,12 @@ const Sidebar = () => {
                 >
                   <ul className="sub-menu text-gray-500">
                     <li>
-                      <Link href="/apps/Category/list">
+                      <Link href="/apps/category/list">
                         {t("Category List")}
                       </Link>
                     </li>
                     <li>
-                      <Link href="/apps/Category/add">{t("Add Category")}</Link>
+                      <Link href="/apps/category/add">{t("Add Category")}</Link>
                     </li>
                   </ul>
                 </AnimateHeight>

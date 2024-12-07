@@ -7,8 +7,8 @@ import { AuthProvider } from "@/context/AuthContext";
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | VRISTO - Multipurpose Tailwind Dashboard Template",
-    default: "VRISTO - Multipurpose Tailwind Dashboard Template",
+    template: "AppleMore",
+    default: "AppleMore",
   },
 };
 const nunito = Nunito({
