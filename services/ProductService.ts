@@ -11,16 +11,16 @@ export const getAllProducts = async () => {
             console.error(error.response?.data);
         }
         throw new Error("An unexpected error occurred");
-        
+
     }
 }
 
-export const getSingleProduct = async (productId :string)=>{
+export const getSingleProduct = async (productId: string) => {
     try {
         const response = await axiosInstance.get(`/admin/product/${productId}`);
         return response;
     } catch (error) {
-        
+
         if (axios.isAxiosError(error)) {
             console.error(error.response?.data);
         }
@@ -43,6 +43,24 @@ export const addProduct = async (productData: any) => {
 export const updateProduct = async (productId: string, productData: any) => {
     try {
         const response = await axiosInstance.put(`/products/v1/admin/product/${productId}`, productData);
+        return response;
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error(error.response?.data);
+        }
+        throw new Error("An unexpected error occurred");
+    }
+}
+
+export const getCategories = async () => {
+    const response = await axiosInstance.get("/product-service/v1/admin/categories");
+
+    return response.data;
+}
+
+export const addCategory = async (categoryData: any) => {
+    try {
+        const response = await axiosInstance.post("/product-service/v1/admin/categories", categoryData);
         return response;
     } catch (error) {
         if (axios.isAxiosError(error)) {

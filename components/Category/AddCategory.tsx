@@ -6,15 +6,21 @@ import IconSend from "@/components/icon/icon-send";
 import IconX from "@/components/icon/icon-x";
 import Link from "next/link";
 import React, { useState } from "react";
+import { addCategory } from "@/services/ProductService";
+import { useRouter } from "next/navigation";
 
 const AddCategory = () => {
   const [categoryName, setCategoryName] = useState("");
 
+  const router = useRouter();
+
   const handleSave = async () => {
     try {
-      // Add save logic here
-      console.log("Category saved:", categoryName);
+      await addCategory({ categoryName });
+
       alert("Category saved successfully!");
+
+      router.push("/apps/Category/list");
     } catch (error) {
       console.error("Error saving product:", error);
       alert("An error occurred while saving the product.");
@@ -27,7 +33,7 @@ const AddCategory = () => {
         <div className="mt-8 px-4">
           <div className="flex flex-col justify-between lg:flex-row">
             <div className="mb-6 w-full ltr:lg:mr-6 rtl:lg:ml-6">
-              <div className="text-lg">Add Category :-</div>
+              <div className="text-lg">Add Category</div>
               <div className="mt-4 flex items-center">
                 <label
                   htmlFor="categoryName"

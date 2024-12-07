@@ -7,26 +7,44 @@ import { sortBy } from "lodash";
 import { DataTableSortStatus, DataTable } from "mantine-datatable";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { getCategories } from "@/services/ProductService";
 
 const CategoryTable = () => {
   const [items, setItems] = useState([
     {
       CategoryId: 1,
-      CategoryName: "Laurie Fox",
-      description: "Laurie Fox",
-      specification: "Laurie Fox",
-      categoryId: 1,
-      CategoryImage: "example.jpg",
     },
   ]);
-  const [initialRecords, setInitialRecords] = useState(
-    sortBy(items, "CategoryId")
-  );
-  const [records, setRecords] = useState(initialRecords);
+  // const [initialRecords, setInitialRecords] = useState(
+  //   sortBy(items, "CategoryId")
+  // );
+  const [records, setRecords] = useState([]);
   const [search, setSearch] = useState("");
   const deleteRow = (id: any = null) => {
     console.log("deleteRow", id);
   };
+
+  const fetchData = async () => {
+    try {
+      const response = await getCategories();
+
+      const categories = response.data;
+
+      categories.forEach((category: any, index: number) => {
+        category.categoryId = index + 1;
+      });
+
+      console.log("categories", categories);
+
+      setRecords(categories);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -34,27 +52,10 @@ const CategoryTable = () => {
         <div className="Category-table">
           <div className="mb-4.5 flex flex-col gap-5 px-5 md:flex-row md:items-center">
             <div className="flex items-center gap-2">
-              {/* <button
-                type="button"
-                className="btn btn-danger gap-2"
-                onClick={() => deleteRow()}
-              >
-                <IconTrashLines />
-                Delete
-              </button> */}
               <Link href="/apps/Category/add" className="btn btn-primary gap-2">
                 <IconPlus />
                 Add New
               </Link>
-            </div>
-            <div className="ltr:ml-auto rtl:mr-auto">
-              <input
-                type="text"
-                className="form-input w-auto"
-                placeholder="Search..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
             </div>
           </div>
 
@@ -64,22 +65,20 @@ const CategoryTable = () => {
               records={records}
               columns={[
                 {
-                  accessor: "Category ID",
-                  sortable: true,
-                  render: ({ CategoryId }) => (
-                    <Link href="/apps/Category/preview">
-                      <div className="font-semibold text-primary underline hover:no-underline">{`${CategoryId}`}</div>
-                    </Link>
+                  accessor: "Category number",
+                  sortable: false,
+                  render: ({ categoryId }) => (
+                    <div className="font-semibold">{`${categoryId}`}</div>
                   ),
                 },
                 {
-                  accessor: "Category Name",
-                  sortable: true,
-                  render: ({ CategoryName }) => (
-                    <div className="font-semibold">{`${CategoryName}`}</div>
+                  accessor: "Category name",
+                  sortable: false,
+                  render: ({ categoryName }) => (
+                    <div className="font-semibold">{`${categoryName}`}</div>
                   ),
                 },
-                
+
                 {
                   accessor: "action",
                   title: "Actions",
