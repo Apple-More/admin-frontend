@@ -16,7 +16,7 @@ const SavePanel: React.FC<SavePanelProps> = ({ handleSave }) => {
         onClick={handleSave}
       >
         <IconSave className="shrink-0 ltr:mr-2 rtl:ml-2" />
-        Save
+        Add Product
       </button>
     </>
   );

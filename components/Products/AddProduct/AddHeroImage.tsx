@@ -11,8 +11,7 @@ const AddHeroImage: React.FC<AddHeroImageProps> = ({
 }) => {
   const handleHeroImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
-    const newPreviewHeroImages = files.map((file) => URL.createObjectURL(file));
-    setPreviewHeroImage((prev) => [...prev, ...newPreviewHeroImages]);
+    setPreviewHeroImage((prev) => [...prev, ...files.map(file => URL.createObjectURL(file))]);
   };
 
   return (

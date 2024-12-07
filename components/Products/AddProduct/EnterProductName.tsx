@@ -1,18 +1,12 @@
 import React from "react";
+
 interface EnterProductNameProps {
-  formData: {
-    productName: string;
-    description: string;
-    price: string;
-    stock: string;
-    attributes: Record<string, string>;
-  };
-  handleInputChange: React.ChangeEventHandler<HTMLInputElement>;
+  productName: string;
+  setProductName: (name: string) => void;
 }
 
 const EnterProductName: React.FC<EnterProductNameProps> = ({
-  formData,
-  handleInputChange,
+  productName, setProductName,
 }) => {
   return (
     <>
@@ -25,8 +19,8 @@ const EnterProductName: React.FC<EnterProductNameProps> = ({
         name="productName"
         className="form-input flex-1"
         placeholder="Enter Product Name"
-        value={formData.productName}
-        onChange={handleInputChange}
+        value={productName}
+        onChange={(e) => setProductName(e.target.value)}
       />
     </>
   );

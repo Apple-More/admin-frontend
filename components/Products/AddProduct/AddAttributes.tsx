@@ -1,50 +1,42 @@
 import React from "react";
 
 interface AddAttributesProps {
-  attributeList: string[];
-  handleAttributeChange: (attribute: string, value: string) => void;
-  addNewAttribute: () => void;
-  selectedAttributes: string[];
+  attributeList: any[];
+  selectedAttributesList: any[];
+  setSelectedAttributesList: (attributes: any[]) => void;
+  toggleAttribute: (attribute: any) => void;
   newAttribute: string;
-  setNewAttribute: React.Dispatch<React.SetStateAction<string>>;
-  toggleAttribute: (attribute: string) => void;
-  formData: {
-    productName: string;
-    description: string;
-    price: string;
-    stock: string;
-    attributes: Record<string, string>;
-  };
+  setNewAttribute: (value: string) => void;
+  addNewAttribute: () => void;
 }
 
 const AddAttributes: React.FC<AddAttributesProps> = ({
-  attributeList,
-  selectedAttributes,
-  handleAttributeChange,
-  addNewAttribute,
-  newAttribute,
-  setNewAttribute,
-  toggleAttribute,
-  formData,
-}) => {
+    attributeList,
+    setSelectedAttributesList,
+    selectedAttributesList,
+    toggleAttribute,
+    newAttribute,
+    setNewAttribute,
+    addNewAttribute
+  }) => {
   return (
     <>
       {/* Attribute Selection */}
       <div className="mb-6">
         <div className="mb-2">Select Attributes:</div>
         <div className="flex flex-wrap gap-2">
-          {attributeList.map((attribute) => (
+          {attributeList.map((attribute:any) => (
             <button
-              key={attribute}
+              key={attribute.id}
               type="button"
               className={`btn ${
-                selectedAttributes.includes(attribute)
-                  ? "btn-primary"
-                  : "btn-outline-primary"
+              selectedAttributesList.some((attr) => attr.id === attribute.id)
+                ? "btn-primary"
+                : "btn-outline-primary"
               }`}
               onClick={() => toggleAttribute(attribute)}
             >
-              {attribute}
+              {attribute.name}
             </button>
           ))}
         </div>
@@ -70,21 +62,26 @@ const AddAttributes: React.FC<AddAttributesProps> = ({
 
       {/* Dynamic Attribute Fields */}
       <div className="mt-4">
-        {selectedAttributes.map((attribute) => (
-          <div key={attribute} className="mt-4 flex items-center">
-            <label htmlFor={attribute} className="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">
-              {attribute}
+        {selectedAttributesList.map((attribute) => (
+            <div key={attribute.id} className="mt-4 flex items-center">
+            <label htmlFor={attribute.id} className="mb-0 w-1/3 ltr:mr-2 rtl:ml-2">
+              {attribute.name}
             </label>
             <input
-              id={attribute}
+              id={attribute.id}
               type="text"
-              name={attribute}
+              name={attribute.name}
               className="form-input flex-1"
-              placeholder={`Enter ${attribute}`}
-              value={formData.attributes[attribute] || ""}
-              onChange={(e) => handleAttributeChange(attribute, e.target.value)}
+              placeholder={`Enter ${attribute.name}`}
+              value={attribute.value || ""}
+              onChange={(e) => {
+              const updatedAttributes = selectedAttributesList.map((attr) =>
+                attr.id === attribute.id ? { ...attr, value: e.target.value } : attr
+              );
+              setSelectedAttributesList(updatedAttributes);
+              }}
             />
-          </div>
+            </div>
         ))}
       </div>
     </>

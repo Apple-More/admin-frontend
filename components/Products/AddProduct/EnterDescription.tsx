@@ -1,18 +1,11 @@
 import React from "react";
 interface EnterDescriptionProps {
-  formData: {
-    productName: string;
-    description: string;
-    price: string;
-    stock: string;
-    attributes: Record<string, string>;
-  };
-  handleInputChange: React.ChangeEventHandler<HTMLTextAreaElement>;
+  description: string;
+  setDescription: (value: string) => void;
 }
 
 const EnterDescription: React.FC<EnterDescriptionProps> = ({
-  formData,
-  handleInputChange,
+  description, setDescription
 }) => {
   return (
     <>
@@ -25,8 +18,8 @@ const EnterDescription: React.FC<EnterDescriptionProps> = ({
         className="form-input flex-1"
         placeholder="Enter Description"
         rows={4}
-        value={formData.description}
-        onChange={handleInputChange}
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
       />
     </>
   );
