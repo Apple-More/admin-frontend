@@ -13,6 +13,7 @@ import { loginService } from "@/services/LoginServices";
 import jwt from "jsonwebtoken";
 import { User } from "@/types/UserType";
 import Loading from "@/components/layouts/loading";
+import { toast } from "react-toastify";
 
 // Define the structure of the AuthContext
 export interface AuthContextType {
@@ -69,9 +70,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
 
       setUser(user);
-      router.push("/");
+      toast.success("Login successfully");
+      router.push("/sales");
     } catch (error) {
       console.error("Login failed:", error);
+      toast.error("Invalid email or password");
       throw new Error("Invalid email or password");
     }
   };
@@ -104,11 +107,39 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setLoading(false); // Mark loading as complete after processing
   }, []);
 
+  // Retrieve stored user from localStorage on mount
+  useEffect(() => {
+    const storedToken = localStorage.getItem("jwt_token");
+    if (storedToken) {
+      try {
+        const decoded = jwt.decode(storedToken);
+
+        if (decoded && typeof decoded === "object" && "user" in decoded) {
+          setUser(decoded.user as User);
+        } else {
+          console.error("User object missing in decoded token.");
+        }
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
+    }
+    setLoading(false); // Ensure loading is false after processing
+  }, []);
+
+  // Store user in localStorage when it changes
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("user");
+    }
+  }, [user]);
+
   return (
     <AuthContext.Provider
       value={{ user, login, logout, isAuthenticated, loading }}
     >
-      {!loading ? children : <Loading/>} {/* Show a loading indicator */}
+      {!loading ? children : <Loading />} {/* Show a loading indicator */}
     </AuthContext.Provider>
   );
 };

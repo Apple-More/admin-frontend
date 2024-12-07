@@ -1,8 +1,6 @@
 export interface ProductVariant {
-  variantId: string;
-  price: string;
-
-  stock: string;
-
-  attributes: Record<string, string>;
+  id: string;
+  price: number;
+  stock: number;
+  productId: string;
 }

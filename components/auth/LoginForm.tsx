@@ -17,7 +17,7 @@ const LoginForm = () => {
     try {
       await login(email, password);
     } catch (error) {
-      toast.error("Invalid email or password");
+      console.log("Invalid email or password");
     }
   };
 

@@ -1,6 +1,7 @@
 "use client";
 
 import IconSave from "@/components/icon/icon-save";
+import { getCategories } from "@/services/ProductService";
 import React, { useState, useEffect } from "react";
 
 interface EditCategoryProps {
@@ -10,25 +11,24 @@ interface EditCategoryProps {
 const EditCategory: React.FC<EditCategoryProps> = ({ categoryId }) => {
   const [categoryName, setCategoryName] = useState<string>(""); // Specify the type as string
   const [isLoading, setIsLoading] = useState<boolean>(false); // Specify the type as boolean
-
+  const [records, setRecords] = useState([]);
   // Fetch the existing category data
   useEffect(() => {
     const fetchCategory = async (): Promise<void> => {
       try {
-        setIsLoading(true);
-        // Simulate an API call to fetch category data by ID
-        const categoryData = await fetch(`/api/categories/${categoryId}`).then(
-          (res) => {
-            if (!res.ok) {
-              throw new Error("Failed to fetch category details");
-            }
-            return res.json();
-          }
-        );
-        setCategoryName(categoryData.name || "");
+        const response = await getCategories();
+
+        const categories = response.data;
+
+        categories.forEach((category: any, index: number) => {
+          category.categoryId = index + 1;
+        });
+
+        console.log("categories", categories);
+
+        setRecords(categories);
       } catch (error) {
-        console.error("Error fetching category:", error);
-        alert("Failed to fetch category details.");
+        console.error(error);
       } finally {
         setIsLoading(false);
       }

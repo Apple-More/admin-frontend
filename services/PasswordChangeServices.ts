@@ -7,6 +7,7 @@ export const forgotPassword = async (userEmail:string) => {
     const response = await axiosInstance.post(
       "/user-service/v1/public/auth/admin/forgot-password",userEmail
     );
+    console.log(response);
     return response; 
   } catch (error) {
     if (axios.isAxiosError(error)) {

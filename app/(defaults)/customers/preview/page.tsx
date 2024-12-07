@@ -1,12 +1,12 @@
-import CustomersTable from '@/components/customers/CustomerPreview'
-import React from 'react'
+import CustomersTable from "@/components/customers/CustomerPreview";
+import React from "react";
 
-const Customers = () => {
+const CustomerPreview = () => {
   return (
     <div>
-      <CustomersTable/>
+      <CustomersTable />
     </div>
-  )
-}
+  );
+};
 
-export default Customers
+export default CustomerPreview;

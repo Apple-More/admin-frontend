@@ -4,7 +4,7 @@ import axios from "axios";
 
 export const getAllProducts = async () => {
     try {
-        const response = await axiosInstance.get("/products/v1/admin/product");
+        const response = await axiosInstance.get("/product-service/v1/admin/product");
         return response;
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -17,7 +17,7 @@ export const getAllProducts = async () => {
 
 export const getSingleProduct = async (productId: string) => {
     try {
-        const response = await axiosInstance.get(`/admin/product/${productId}`);
+        const response = await axiosInstance.get(`/product-service/v1/admin/product/${productId}`);
         return response;
     } catch (error) {
 
@@ -56,6 +56,12 @@ export const getCategories = async () => {
     const response = await axiosInstance.get("/product-service/v1/admin/categories");
 
     return response.data;
+
+    try {
+        
+    } catch (error) {
+        
+    }
 }
 
 export const addCategory = async (categoryData: any) => {

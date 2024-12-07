@@ -187,34 +187,6 @@ const Header = () => {
             </button>
           </div>
 
-          <div className="hidden sm:block ltr:mr-2 rtl:ml-2">
-            <ul className="flex items-center space-x-2 dark:text-[#d0d2d6] rtl:space-x-reverse">
-              <li>
-                <Link
-                  href="/apps/calendar"
-                  className="block rounded-full bg-white-light/40 p-2 hover:bg-white-light/90 hover:text-primary dark:bg-dark/40 dark:hover:bg-dark/60"
-                >
-                  <IconCalendar />
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/apps/todolist"
-                  className="block rounded-full bg-white-light/40 p-2 hover:bg-white-light/90 hover:text-primary dark:bg-dark/40 dark:hover:bg-dark/60"
-                >
-                  <IconEdit />
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/apps/chat"
-                  className="block rounded-full bg-white-light/40 p-2 hover:bg-white-light/90 hover:text-primary dark:bg-dark/40 dark:hover:bg-dark/60"
-                >
-                  <IconChatNotification />
-                </Link>
-              </li>
-            </ul>
-          </div>
           <div className="flex items-center space-x-1.5 dark:text-[#d0d2d6] sm:flex-1 lg:space-x-2 ltr:ml-auto ltr:sm:ml-0 rtl:mr-auto rtl:space-x-reverse sm:rtl:mr-0">
             <div className="sm:ltr:mr-auto sm:rtl:ml-auto">
               <form

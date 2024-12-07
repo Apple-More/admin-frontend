@@ -1,16 +1,13 @@
+import { ProductImage } from "./ProductImageType";
 import { ProductVariant } from "./ProductVariantType";
 
 export interface Product {
-  productId: string;
+  id: string;
   productName: string;
-
   description: string;
-
-  category: string[];
-
-  images: string[];
-
-  heroImage: string;
-
+  specification: string | null;
+  categoryId: string;
+  adminId: string;
+  images: ProductImage[];
   variants: ProductVariant[];
 }

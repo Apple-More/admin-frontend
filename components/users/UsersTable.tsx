@@ -8,8 +8,9 @@ import { DataTableSortStatus, DataTable } from "mantine-datatable";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { getCategories } from "@/services/ProductService";
+import { getAllCustomers } from "@/services/CustomerServices";
 
-const CategoryTable = () => {
+const UsersTable = () => {
   const [items, setItems] = useState([
     {
       CategoryId: 1,
@@ -26,7 +27,7 @@ const CategoryTable = () => {
 
   const fetchData = async () => {
     try {
-      const response = await getCategories();
+      const response = await getAllCustomers();
 
       const categories = response.data;
 
@@ -66,8 +67,6 @@ const CategoryTable = () => {
               columns={[
                 {
                   accessor: "Category number",
-                  title: "No",
-                  textAlignment: "center",
                   sortable: false,
                   render: ({ categoryId }) => (
                     <div className="font-semibold">{`${categoryId}`}</div>
@@ -75,11 +74,9 @@ const CategoryTable = () => {
                 },
                 {
                   accessor: "Category name",
-                  title: "Category Name",
-                  textAlignment: "center",
                   sortable: false,
                   render: ({ categoryName }) => (
-                    <div className=" font-semibold">{`${categoryName}`}</div>
+                    <div className="font-semibold">{`${categoryName}`}</div>
                   ),
                 },
 
@@ -121,4 +118,4 @@ const CategoryTable = () => {
   );
 };
 
-export default CategoryTable;
+export default UsersTable;
