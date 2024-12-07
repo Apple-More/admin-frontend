@@ -5,9 +5,10 @@ import Link from "next/link";
 
 interface SavePanelProps {
   handleSave: () => void;
+  text: string;
 }
 
-const SavePanel: React.FC<SavePanelProps> = ({ handleSave }) => {
+const SavePanel: React.FC<SavePanelProps> = ({ handleSave, text }) => {
   return (
     <>
       <button
@@ -16,7 +17,7 @@ const SavePanel: React.FC<SavePanelProps> = ({ handleSave }) => {
         onClick={handleSave}
       >
         <IconSave className="shrink-0 ltr:mr-2 rtl:ml-2" />
-        Add Product
+        {text}
       </button>
     </>
   );
