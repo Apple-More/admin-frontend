@@ -15,7 +15,7 @@ import AddCategory from "./AddCategory";
 import { toast } from "react-toastify";
 import { addProduct, getProductAttributes, addProductAttribute, addProductAttributeValue, addProductVariant, addProductVariantAttribute, addHeroImage, addProductImage } from "@/services/ProductService";
 import { forEach } from "lodash";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const AddProduct = () => {
   // form data
