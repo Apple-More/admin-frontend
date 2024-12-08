@@ -98,7 +98,7 @@ const OrdersTable = () => {
                 title: "Sale",
                 textAlignment: "center",
                 sortable: false,
-                render: ({ sale }) => <div>${(sale / 100).toFixed(2)}</div>,
+                render: ({ sale }) => <div>LKR{(sale).toFixed(2)}</div>,
               },
               {
                 accessor: "status",
