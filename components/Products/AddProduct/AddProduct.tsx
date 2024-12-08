@@ -15,6 +15,7 @@ import AddCategory from "./AddCategory";
 import { toast } from "react-toastify";
 import { addProduct, getProductAttributes, addProductAttribute, addProductAttributeValue, addProductVariant, addProductVariantAttribute, addHeroImage, addProductImage } from "@/services/ProductService";
 import { forEach } from "lodash";
+import { useRouter } from "next/router";
 
 const AddProduct = () => {
   // form data
@@ -181,8 +182,13 @@ const AddProduct = () => {
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [previewHeroImage, setPreviewHeroImage] = useState<string[]>([]);
 
+  const router = useRouter();
+
   const handleImageUpload = async () => {
+   
     try {
+      await saveProductVariant();
+
       for (const heroImage of previewHeroImage) {
         const response = await fetch(heroImage);
         const blob = await response.blob();
@@ -197,10 +203,11 @@ const AddProduct = () => {
         await addProductImage(productId, file);
       }
 
-      toast.success("Images uploaded successfully.");
+      toast.success("Product save successfully.");
+      router.push("/apps/products/list");
     } catch (error) {
       console.error("Error uploading images:", error);
-      toast.error("An error occurred while uploading images.");
+      toast.error("An error occurred while saving product.");
     }
   }
 
