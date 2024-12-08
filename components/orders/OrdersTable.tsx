@@ -1,15 +1,18 @@
 "use client";
 import IconEye from "@/components/icon/icon-eye";
 import IconTrashLines from "@/components/icon/icon-trash-lines";
+import { getAllCustomers } from "@/services/CustomerServices";
 import { getAllOrders } from "@/services/OrderServices";
+import { Customer } from "@/types/CustomerType";
 import { Orders } from "@/types/OrderType";
 import { DataTable } from "mantine-datatable";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 const OrdersTable = () => {
-  const [records, setRecords] = useState<Orders[]>([]);
+  const [records, setRecords] = useState<any[]>([]);
   const [search, setSearch] = useState("");
+  const [cusotmers, setCustomers] = useState<Customer[]>([]);
 
   const fetchAllOrders = async () => {
     try {
@@ -17,15 +20,21 @@ const OrdersTable = () => {
 
       // Ensure response.data.data is an array
       if (Array.isArray(response.data.data)) {
-        const orders = response.data.data.map((customer: any) => ({
-            customerName: customer.customerName,
-            email: customer.email,
-            date: customer.createdAt,
-            sale: customer.totalAmount,
-            status: customer.order_status,
+        const orders = response.data.data.map((order: any) => ({
+          customerName: order.data.customerName,
+          email: order.data.email,
+          created_date_time: order.created_date_time,
+          sale: order.order_items.reduce(
+            (total: number, item: any) => total + item.price,
+            0
+          ), // Sum of all item prices
+          order_status: order.order_status,
+          orderItems: order.order_items.map((item: any) => ({
+            productName: item.product.productName,
+            quantity: item.quantity,
+          })),
         }));
-        console.log(response);
-        setRecords(orders); // Set the filtered customer data
+        setRecords(orders);
       } else {
         console.error(
           "Expected an array in response.data.data but got:",
@@ -50,15 +59,6 @@ const OrdersTable = () => {
       <div className="Customer-table">
         <div className="mb-4.5 flex flex-col gap-5 px-5 md:flex-row md:items-center">
           <div className="text-lg">Orders</div>
-          {/* <div className="ltr:ml-auto rtl:mr-auto">
-            <input
-              type="text"
-              className="form-input w-auto"
-              placeholder="Search..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </div> */}
         </div>
 
         <div className="datatables pagination-padding">
@@ -89,37 +89,63 @@ const OrdersTable = () => {
                 title: "Date",
                 textAlignment: "center",
                 sortable: false,
-                render: ({ date }) => <div>{date?.split('T')[0]}</div>,
+                render: ({ created_date_time }) => (
+                  <div>{created_date_time?.split("T")[0]}</div>
+                ),
               },
               {
-                accessor: "phoneNumber",
+                accessor: "sale",
+                title: "Sale",
+                textAlignment: "center",
+                sortable: false,
+                render: ({ sale }) => <div>${(sale / 100).toFixed(2)}</div>,
+              },
+              {
+                accessor: "status",
                 title: "Status",
                 textAlignment: "center",
                 sortable: false,
-                render: ({ status }) => {
-                  return (
-                    <div className={`whitespace-nowrap ${
-                      status === 'payment_completed'
-                      ? 'text-success'
-                      :status === "payment_pending"
-                      ? 'text-secondary'
-                      : status === 'shipped'
-                      ? 'text-info'
-                      : status === 'cancelled'
-                      ? 'text-danger'
-                      : 'text-success'
-                    }`}>
-                      {status ? status.replace(/_/g, ' ').toUpperCase() : ''}
-                    </div>
-                  );
-                },
+                render: ({ order_status }) => (
+                  <div
+                    className={`whitespace-nowrap ${
+                      order_status === "payment_completed"
+                        ? "text-success"
+                        : order_status === "payment_pending"
+                        ? "text-secondary"
+                        : order_status === "shipped"
+                        ? "text-info"
+                        : order_status === "cancelled"
+                        ? "text-danger"
+                        : "text-success"
+                    }`}
+                  >
+                    {order_status
+                      ? order_status.replace(/_/g, " ").toUpperCase()
+                      : ""}
+                  </div>
+                ),
               },
               {
                 accessor: "email",
                 title: "Email",
                 textAlignment: "center",
                 sortable: false,
-                render: ({ email }) => <div>{email}</div>,
+                render: ({ email }) => <div>{email} </div>,
+              },
+              {
+                accessor: "orderItems",
+                title: "Order Items",
+                textAlignment: "center",
+                sortable: false,
+                render: ({ orderItems }) => (
+                  <ul>
+                    {orderItems.map((item: any, index: number) => (
+                      <li key={index}>
+                        {item.quantity} x {item.productName}
+                      </li>
+                    ))}
+                  </ul>
+                ),
               },
               {
                 accessor: "action",
@@ -145,7 +171,6 @@ const OrdersTable = () => {
                 ),
               },
             ]}
-            // Removed getRowKey as it is not a valid property
           />
         </div>
       </div>
